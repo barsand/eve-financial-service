@@ -1,5 +1,6 @@
 import models
 
 DOMAIN = {
-    'user': models.user.schema
+    'users': models.user.schema,
+    'accounts': models.account.schema
 }
