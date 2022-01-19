@@ -9,3 +9,7 @@ install:
 
 uninstall:
 	rm -Rf ./venv
+
+pepcheck:
+	flake8 src/ tests/ --max-line-length 94
+
