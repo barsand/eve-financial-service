@@ -4,8 +4,38 @@ import flask
 import pymongo
 import collections
 
-
+DATE_FORMAT = '%Y/%m/%d'
 balances = flask.Blueprint('balances', __name__)
+
+
+@balances.route('/account/<account_id>/balances/transactions', methods=['GET'])
+def report_account_transactions(account_id):
+    client = pymongo.MongoClient(os.environ['MONGO_URI'])
+
+    account = client['eve']['accounts'].find_one({'_id': bson.ObjectId(account_id)})
+    latest_balance = account['starting_balance']
+
+    query = {
+        'filter': {'account': bson.ObjectId(account_id)},
+        'sort': [('date', 1)]
+    }
+    balance_table = list()
+    balance_table.append(
+        '\t'.join(['Date', 'Name', 'Amount', 'Account', 'Account Balance'])
+    )
+    for transaction in client['eve']['transactions'].find(**query):
+        latest_balance += transaction['amount']
+        balance_table.append('\t'.join([
+            transaction['date'].strftime(DATE_FORMAT),
+            transaction['name'],
+            '%.2f' % transaction['amount'],
+            account_id,
+            '%.2f' % latest_balance
+        ]))
+
+    client.close()
+
+    return '\n'.join(balance_table)
 
 
 @balances.route('/user/<user_id>/balances/accounts', methods=['GET'])
@@ -23,7 +53,7 @@ def report_transactions_grouped_by_account(user_id):
         account_info[curr_account_id]['type'] = account['type']
 
         for transaction in client['eve']['transactions'].find({'account': account['_id']}):
-            curr_date_strf = transaction['date'].strftime('%Y/%m/%d')
+            curr_date_strf = transaction['date'].strftime(DATE_FORMAT)
             date2account2transactions[curr_date_strf][curr_account_id].append(
                     transaction['amount'])
 
@@ -52,4 +82,5 @@ def report_transactions_grouped_by_account(user_id):
             ]))
         balance_table.append('\n')
 
+    client.close()
     return '\n'.join(balance_table)
