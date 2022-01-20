@@ -1,5 +1,6 @@
 import sys
 import random
+import datetime
 import requests
 
 STOCKS = [
@@ -11,6 +12,7 @@ STOCKS = [
 
 if __name__ == '__main__':
     res = requests.post('http://127.0.0.1:5000/transactions', json={
+        'date': datetime.datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT'),
         'name': 'Purchase %s' % random.choice(STOCKS),
         'amount': '%.2f' % random.uniform(75, 1500),
         'account': sys.argv[1]

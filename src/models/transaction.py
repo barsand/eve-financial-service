@@ -7,7 +7,6 @@ schema = {
     'schema': {
         'date': {
             'type': 'datetime',
-            'default': datetime.datetime.utcnow()
         },
         'name': {
             'type': 'string',
