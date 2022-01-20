@@ -1,6 +1,3 @@
-import datetime
-
-
 schema = {
     'item_methods': ['GET', 'GET', 'PATCH', 'DELETE'],
     'resource_methods': ['POST', 'GET'],

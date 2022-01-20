@@ -9,12 +9,14 @@ STOCKS = [
     'SPGI', 'IBM'
 ]
 
+date = datetime.datetime.utcnow() - datetime.timedelta(days=(5-random.randint(0, 5)))
+
 
 if __name__ == '__main__':
     res = requests.post('http://127.0.0.1:5000/transactions', json={
-        'date': datetime.datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT'),
+        'date': date.strftime('%a, %d %b %Y %H:%M:%S GMT'),
         'name': 'Purchase %s' % random.choice(STOCKS),
-        'amount': '%.2f' % random.uniform(75, 1500),
+        'amount': '%.2f' % random.uniform(-100, 100),
         'account': sys.argv[1]
     })
     if '--silent' in sys.argv:

@@ -1,9 +1,11 @@
 import os
 import eve
 import sys
-import hooks
 import pymongo
+
+import hooks
 import settings
+import blueprints
 
 
 def check_db_conn():
@@ -26,12 +28,18 @@ def check_db_conn():
 check_db_conn()
 
 app = eve.Eve(settings={
-    'DOMAIN': settings.DOMAIN
+    'DOMAIN': settings.DOMAIN,
 })
 
+
+# registering hooks
+app.on_insert_accounts = hooks.account.handle_insert_accounts
 app.on_inserted_transactions = hooks.balance.handle_inserted_transactions
 app.on_updated_transactions = hooks.balance.handle_updated_transactions
 app.on_deleted_item_transactions = hooks.balance.handle_deleted_transactions
+
+# registering blueprints
+app.register_blueprint(blueprints.balances)
 
 
 if __name__ == '__main__':

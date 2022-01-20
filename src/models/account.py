@@ -18,11 +18,15 @@ schema = {
             # user-managed entity if its a feature that fits the business model
             'allowed': ['Checking', 'Savings', 'Investment', 'Credit Card']
         },
+        'starting_balance': {
+            'type': 'float',
+            'default': 0
+        },
         'current_balance': {
             'type': 'float',
             'default': 0
         },
-        'user_id': {
+        'user': {
             'type': 'objectid',
             'required': True,
             'data_relation': {
