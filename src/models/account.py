@@ -16,7 +16,7 @@ schema = {
             'required': True,
             # This should be replaced by a more robust setup, such as a config collection or a
             # user-managed entity if its a feature that fits the business model
-            'allowed': ['Checking', 'Savings', 'Investment', ' Credit Card']
+            'allowed': ['Checking', 'Savings', 'Investment', 'Credit Card']
         },
         'current_balance': {
             'type': 'float',
